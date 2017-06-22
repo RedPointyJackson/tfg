@@ -1,0 +1,15 @@
+exe
+*.o
+\#*#
+tex/*.aux
+gmon.out
+tex/*.toc
+tex/*.out
+tex/*.log
+tex/*.bbl
+tex/*.blg
+tex/_minted-main
+tex/_region_.prv
+study_cases/correlation/tex
+data
+biblio
