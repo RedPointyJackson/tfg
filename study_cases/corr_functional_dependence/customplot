@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+
+# Imports
+def cm2inch(value):
+    return value/2.54
+
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib as mpl
+import pandas as pd
+import numpy as np
+import seaborn.apionly as sns
+
+
+lsc = mpl.colors.LinearSegmentedColormap
+
+niceblue = '#64B5CD'
+nicered = '#C44E52'
+niceyellow = '#CCB974'
+
+plt.style.use('custom')
+
+colormap = lsc.from_list('foo',[(0.0,niceblue),
+                                (0.5,niceyellow),
+                                (1.0,nicered)])
+
+maxt, mint = 1e3,1
+
+def get_color(t):
+    τ = (t-mint)/(maxt-mint)
+    return colormap(τ)
+
+
+niceblue = '#64B5CD'
+nicered = '#C44E52'
+niceyellow = '#CCB974'
+
+import matplotlib as mpl
+lsc = mpl.colors.LinearSegmentedColormap
+colormap = lsc.from_list('foo',[(0.0,niceblue),
+                                (0.5,niceyellow),
+                                (1.0,nicered)])
+
+plt.style.use('custom')
+
+df = pd.read_csv('anneal.csv').groupby(['mc','parameter']).mean().reset_index()
+
+
+# Just the 1D plots
+
+ts = np.unique(df['parameter'])
+maxt, mint = max(ts), min(ts)
+
+tws = np.unique(df['mc'])
+maxtw, mintw = max(tws), min(tws)
+
+def get_color_t(t):
+    lmaxt = np.log10(maxt)
+    lmint = np.log10(mint)
+    τ = (np.log10(t)-lmint)/(lmaxt-lmint)
+    return colormap(τ)
+
+def get_color_tw(tw):
+    lmaxtw = np.log10(maxtw)
+    lmintw = np.log10(mintw)
+    τ = (np.log10(tw)-lmintw)/(lmaxtw-lmintw)
+    return colormap(τ)
+
+fig = plt.figure(figsize=(cm2inch(15),cm2inch(8)))
+axL = fig.add_subplot(121)
+axR = fig.add_subplot(122)
+
+i = 0
+for t,tdf in df.groupby('parameter'):
+    if i%2 == 0:
+        axL.plot(tdf['mc'], tdf['value'],
+                lw=1, color=get_color_t(t))
+    i+=1
+
+axL.set_xscale('log')
+axL.set_xlabel('$t_w$')
+axL.set_ylabel('$C(t_w,t_w+t_0)$')
+
+for tw,twdf in df.groupby('mc'):
+    if i%2 == 0:
+        axR.plot(twdf['parameter'], twdf['value'],
+                lw=1, color=get_color_tw(tw))
+    i+=1
+
+axR.set_xscale('log')
+axR.set_xlabel('$t_0$')
+axR.set_ylabel('')
+
+axR.set_ylim(0,1)
+axL.set_ylim(0,1)
+
+axR.set_yticklabels([])
+
+
+
+
+
+
+
+# Create a fake colorbars
+def fmt(x, pos):
+    return '%d' % x
+
+sm = cm.ScalarMappable(cmap=colormap,norm=plt.Normalize(vmin=0,vmax=maxt))
+sm.set_array([])
+
+
+cbaxes = fig.add_axes([0.25, 0.3, 0.25, 0.01])
+cbar = plt.colorbar(sm,
+                    format=mpl.ticker.FuncFormatter(fmt),
+                    orientation='horizontal',
+                    cax=cbaxes)
+cbar.outline.set_visible(False)
+cbar.ax.set_title('')
+cbar.ax.title.set_size(10)
+cbar.ax.title.set_color('#555555')
+
+
+fig.savefig('corrfunction.pdf')
