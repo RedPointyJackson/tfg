@@ -1,0 +1,163 @@
+#!/usr/bin/env python3
+
+# Imports
+def cm2inch(value):
+    return value/2.54
+
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib as mpl
+from matplotlib import gridspec
+import pandas as pd
+import numpy as np
+import seaborn.apionly as sns
+
+niceblue   = '#64B5CD'
+nicered    = '#C44E52'
+niceyellow = '#CCB974'
+nicegray   = '#222222'
+
+
+
+plt.style.use('custom')
+
+memento_memory = pd.read_csv('memento_memory.csv')
+janus_memory = pd.read_csv('janus_memory.csv')
+
+results = pd.concat([memento_memory,janus_memory]).sort_values('tw')
+results['Δt'] = results['tw'] - results['tw1']
+
+
+############################
+#                          #
+#       Dependences        #
+#                          #
+############################
+
+
+fig = plt.figure(figsize=(cm2inch(15),cm2inch(12)))
+
+# Define "Touching" as the moment in with Δχ < theshold
+touchdf = pd.DataFrame()
+for p,pdf in results.groupby(['L','Trel','t','tw1']):
+    L, Trel, t, tw1 = p
+    belowdf = pdf[pdf['Δχ'] < 0]
+    if len(belowdf) == 0: continue
+    reachtime = min(belowdf['Δt'])
+    touchdf = pd.concat([touchdf, pd.DataFrame({'L':[L],
+                                               'Trel':[Trel],
+                                               't':[t],
+                                               'reachtime':[reachtime],
+                                               'tw1':[tw1]})],ignore_index=True)
+
+grouped_t    = touchdf.groupby(['t'   , 'L' ]).mean().reset_index()
+grouped_tw1  = touchdf.groupby(['tw1' , 'L' ]).mean().reset_index()
+grouped_Trel = touchdf.groupby(['Trel', 'L' ]).mean().reset_index()
+
+################## x = t₀
+
+ax = fig.add_subplot(231)
+ax.set_xscale('log')
+
+for L, Ldf in grouped_t.groupby('L'):
+    if L!=8:
+        ax.plot(Ldf['t'],Ldf['reachtime'], lw=1,label='L=' + str(L))
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_ylim(1e6,1e8)
+#ax.set_yticklabels([])
+ax.set_xticklabels([])
+ax.set_yscale('log')
+ax.set_xlabel('')
+ax.set_ylabel(r'$Δt$')
+
+legend = ax.legend()
+legend.get_frame().set_facecolor('w')
+legend.get_frame().set_linewidth(0.0)
+
+
+################## x = tw₁
+
+ax = fig.add_subplot(232)
+ax.set_xscale('log')
+
+for L, Ldf in grouped_tw1.groupby('L'):
+    if L!=8:
+        ax.plot(Ldf['tw1'],Ldf['reachtime'],lw=1,label=L)
+
+ax.set_yscale('log')
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_ylim(1e6,1e8)
+ax.set_xticklabels([])
+ax.set_yticklabels([])
+ax.set_xlabel(r'')
+ax.set_ylabel('')
+
+################## x = Trel
+
+ax = fig.add_subplot(233)
+
+for L, Ldf in grouped_Trel.groupby('L'):
+    if L!=8:
+        ax.plot(Ldf['Trel'],Ldf['reachtime'],lw=1,label=L)
+
+ax.set_yscale('log')
+ax.set_ylim(1e6,1e8)
+ax.set_yticklabels([])
+ax.set_xticklabels([])
+ax.set_xlabel(r'')
+ax.set_ylabel('')
+
+################## x = t₀
+
+ax = fig.add_subplot(234)
+ax.set_xscale('log')
+
+for L, Ldf in grouped_t.groupby('L'):
+    if L==8:
+        ax.plot(Ldf['t'],Ldf['reachtime'], lw=1,label='L=' + str(L))
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_ylim(1e0,1e5)
+#ax.set_yticklabels([])
+ax.set_yscale('log')
+ax.set_xlabel('t₀')
+ax.set_ylabel(r'$Δt$')
+
+legend = ax.legend()
+legend.get_frame().set_facecolor('w')
+legend.get_frame().set_linewidth(0.0)
+
+
+################## x = tw₁
+
+ax = fig.add_subplot(235)
+ax.set_xscale('log')
+
+for L, Ldf in grouped_tw1.groupby('L'):
+    if L==8:
+        ax.plot(Ldf['tw1'],Ldf['reachtime'],lw=1,label=L)
+
+ax.set_yscale('log')
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_ylim(1e0,1e5)
+ax.set_yticklabels([])
+ax.set_xlabel(r'$t_w^1$')
+ax.set_ylabel('')
+
+################## x = Trel
+
+ax = fig.add_subplot(236)
+
+for L, Ldf in grouped_Trel.groupby('L'):
+    if L==8:
+        ax.plot(Ldf['Trel'],Ldf['reachtime'],lw=1,label=L)
+
+ax.set_yscale('log')
+ax.set_ylim(1e0,1e5)
+ax.set_yticklabels([])
+ax.set_xlabel(r'$(T_1-T_2)/T_1$')
+ax.set_ylabel('')
+
+
+fig.savefig('dependences.pdf')
