@@ -13,3 +13,5 @@ tex/_region_.prv
 study_cases/correlation/tex
 data
 biblio
+study_cases/vanishingrejuvenation/annealA.csv
+study_cases/vanishingrejuvenation/annealB.csv

@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+
+STEPS = 1e3
+
+# Imports
+def cm2inch(value):
+    return value/2.54
+
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import pandas as pd
+import numpy as np
+
+
+
+niceblue = '#64B5CD'
+nicered = '#C44E52'
+niceyellow = '#CCB974'
+
+
+import matplotlib as mpl
+lsc = mpl.colors.LinearSegmentedColormap
+colormap = lsc.from_list('foo',[(0.0,niceblue),
+                                (0.5,niceyellow),
+                                (1.0,nicered)])
+
+plt.style.use('custom')
+
+def get(file):
+    df = pd.read_csv(file)[['mc','parameter','observable','value','T']].groupby(['mc','parameter','observable']).mean().reset_index()
+    df['β(1-C)'] = (1-df['value'])/df['T']
+    return df
+
+
+# Commented for efficiency. Is dog slow to average 2 GiB.
+
+# print("Averaging A data...")
+# A = get('annealA.csv')
+# print("Averaging B data...")
+# B = get('annealB.csv')
+
+# A.to_csv('annealA_average.csv')
+# B.to_csv('annealB_average.csv')
+
+# Using old data instead:
+
+A = pd.read_csv('annealA_average.csv')
+B = pd.read_csv('annealB_average.csv')
+
+
+ts = np.unique(A['parameter'])
+maxt, mint = max(ts), min(ts)
+
+def get_color(t):
+    lmaxt = np.log10(maxt)
+    lmint = np.log10(mint)
+    τ = (np.log10(t)-lmint)/(lmaxt-lmint)
+    return colormap(τ)
+
+fig = plt.figure(figsize=(cm2inch(15),cm2inch(8)))
+ax = plt.gca()
+rejax = fig.add_axes([0.40,0.6,0.5,0.3])
+rejax.set_xlabel('$t_0$')
+rejax.set_ylabel('Δχ')
+rejax.set_xscale('log')
+# rejax.set_ylim(-50,1000)
+rejax.set_xlim(0.9,10**3)
+rejax.axhline(0,lw=1,alpha=0.3,color='k')
+
+print("Getting trej...")
+
+for t in ts:
+    theB = B[B['parameter'] == t]
+    greatest_χ = theB['β(1-C)'].max()
+    quench = A[(A['parameter'] == t)]
+    trej = greatest_χ - quench['β(1-C)'].min()
+    rejax.scatter(t,trej,s=5,color=get_color(t))
+
+def select(df,t): return df[df['parameter'] == t]
+
+for t in ts:
+    if t in {1,1000}:
+        theA    = select(A,t)
+        theB    = select(B,t)
+        ax.plot(theA['mc']      , theA['β(1-C)'], lw=1, color=get_color(t))
+        ax.plot(STEPS+theB['mc'], theB['β(1-C)'], lw=1, color=get_color(t))
+
+ax.text(320,0.20,'$t_0=10$',color=get_color(1))
+ax.text(300,0.53,'$t_0=10^3$',color=get_color(1000))
+
+ax.text(850, 0.20, 'Δχ > 0', color=get_color(1))
+ax.text(1050, 0.40, 'Δχ < 0', color=get_color(1000))
+
+ax.set_xlabel('$t_w$')
+ax.set_ylabel('χ')
+
+fig.savefig('trej.pdf')
