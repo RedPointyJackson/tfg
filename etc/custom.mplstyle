@@ -1,0 +1,56 @@
+# from http://www.huyng.com/posts/sane-color-scheme-for-matplotlib/
+
+patch.linewidth: 0.5
+patch.facecolor: 348ABD  # blue
+patch.antialiased: True
+
+font.size: 10.0
+
+axes.facecolor: FFFFFF
+axes.edgecolor: 000000
+axes.grid: True
+axes.titlesize: x-large
+axes.labelsize: large
+axes.labelcolor: 000000
+axes.axisbelow: True       # grid/ticks are below elements (e.g., lines, text)
+
+axes.spines.left   : True
+axes.spines.bottom : True
+axes.spines.top    : False
+axes.spines.right  : False
+
+axes.prop_cycle: cycler('color', ['64B5CD','CCB974','8172B2','C44E52','55A868','4C72B0', 'AAAE52','55AA68','4C7AAA'])
+                   #64B5CD # soft blue
+                   #CCB974 # yellowish
+                   #8172B2 # purple
+                   #C44E52 # red
+                   #55A868 # green
+                   #4C72B0 # blue
+
+
+xtick.color: 000000
+xtick.direction: out
+
+ytick.color: 000000
+ytick.direction: out
+
+grid.color: E5E5E5
+grid.linestyle: -    # solid line
+
+# No ticks
+xtick.major.size: 0
+ytick.major.size: 0
+xtick.minor.size: 0
+ytick.minor.size: 0
+
+
+lines.linewidth: 2
+
+figure.autolayout: True
+
+mathtext.fontset : custom
+mathtext.rm : Linux Libertine
+mathtext.it : Linux Libertine
+mathtext.bf : Linux Libertine
+
+font.family : Linux Libertine
