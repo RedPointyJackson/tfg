@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import seaborn.apionly as sns
+import pandas as pd
+from scipy.interpolate import interp1d
+
+colors = mpl.rcParams['axes.prop_cycle'].by_key()['color']
+primary = colors[0]
+secondary = colors[1]
+tertiary = colors[3]
+
+
+plt.style.use('custom')
+
+#####################################
+#            Raw comp               #
+#####################################
+
+df = pd.read_csv('comparison.csv')
+df['mc'] += 1
+
+g = sns.FacetGrid(df, row='L', col='T',
+                  hue='physicist',
+                  sharey=True,
+                  ylim=(-0.6,-0.3),
+                  legend_out=False)
+
+g.map(plt.plot, 'mc', 'E')
+g.add_legend()
+
+g.axes[0,0].set_xscale('log')
+
+plt.savefig('comparison.pdf')
+
+
+#####################################
+#            Mini comp              #
+#####################################
+
+
+def cm2inch(value):
+    return value/2.54
+minifig = plt.figure( figsize=(cm2inch(12), cm2inch(5)) )
+ax = plt.gca()
+
+μdf = df[(df['T'] == 0.7) & (df['L'] == 16)]
+sA = μdf[["replica A" in p for p in μdf['physicist']]]
+sB = μdf[["replica B" in p for p in μdf['physicist']]]
+ss = μdf[["Alejandro" in p for p in μdf['physicist']]]
+
+xx = np.logspace(np.log10(2),5,300)
+
+sergio_energy = interp1d(sA['mc'], sA['E'])(xx)
+clavero_energy = interp1d(ss['mc'], ss['E'])(xx)
+
+ax.plot(xx, sergio_energy-clavero_energy)
+
+ax.legend(markerscale=2)
+
+ax.set_xscale('log')
+ax.set_ylabel('ΔE')
+ax.set_xlabel('MC')
+
+minifig.savefig('comparison_mini.pdf')
+
+plt.clf()
