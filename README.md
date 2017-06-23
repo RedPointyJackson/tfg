@@ -25,6 +25,9 @@ The sofware uses
 `annealer` has no dependencies; the Mersenne Twister library that it
 employs is packaged inside the `lib/` folder and automatically linked.
 
+Compilinig the LaTeX file (in Spanish) will require `minted` and
+`lualatex`.
+
 The code has been only tested on Linux systems.
 
 Usage
@@ -38,5 +41,6 @@ observables. Use `--help` to see a brief help message.
 
 In the `study_cases` folder there are various scripts that can be used
 to explore some situations or make the plots of the dissertation
-(folder `tex`). Of course, they need the original data to work and are
-displayed here only for reference.
+(folder `tex`). Of
+course, they need the original data to work and are displayed here
+only for reference.
