@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import pandas as pd
+import seaborn.apionly as sns
+
+def cm2inch(value): return value/2.54
+plt.style.use('custom')
+
+
+df = pd.read_csv('meas.dat')
+
+df['D'] = (df['μSD']-1)/df['σSD']
+
+fig = plt.figure(figsize=(cm2inch(11), cm2inch(6)))
+gs  = mpl.gridspec.GridSpec(1, 2, width_ratios=[3, 1])
+ax  = fig.add_subplot(gs[0])
+hax = fig.add_subplot(gs[1],sharey=ax)
+
+
+ABOVE=1e2
+
+for t,tdf in df.groupby('T'):
+    ax.scatter(tdf['tw'], tdf['μSD'], s=5)
+    above = tdf[tdf['tw'] > ABOVE]
+    xx = above['tw']
+    yy = above['μSD']
+    σσ = above['σSD']
+    μ = np.mean(yy) # TODO: Weighted mean
+    σ = np.sqrt(np.mean(σσ**2))
+    hax.errorbar(t, μ, yerr=σ, fmt='o',
+                 label='%.2lf ± %.2lf' % (μ,σ))
+
+ax.set_yscale('log')
+hax.set_yscale('log')
+
+hax.legend(loc='lower right', frameon=False)
+
+hax.set_xlabel('T')
+hax.set_xticks(np.unique(df['T']))
+
+ax.set_xscale('log')
+ax.set_xlabel('MC')
+ax.set_ylabel('SD')
+
+print("TODO: Share axis")
+
+ax.set_ylim(1e-2,1e1)
+hax.set_ylim(1e-2,1e1)
+
+hax.spines['left'].set_visible(False)
+
+fig.savefig('SD.pdf')
