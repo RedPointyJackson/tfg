@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+
+def cm2inch(value):
+    return value/2.54
+
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+from matplotlib import gridspec
+import pandas as pd
+import numpy as np
+import seaborn.apionly as sns
+
+niceblue = '#64B5CD'
+nicered    = '#C44E52'
+niceyellow = '#CCB974'
+
+plt.style.use('custom')
+
+import matplotlib as mpl
+
+fig = plt.figure(figsize=(cm2inch(15),cm2inch(5)))
+gs = gridspec.GridSpec(1, 2, width_ratios=[3, 1])
+ax0 = plt.subplot(gs[0])
+ax1 = plt.subplot(gs[1])
+
+fig.subplots_adjust(hspace=0)
+
+ax0.set_yticks([-1,-0.5,0,0.5,1])
+ax1.set_yticks([-1,-0.5,0,0.5,1])
+
+df = pd.read_csv('../../data/finaldata/longrun.csv')
+df = df[df['observable'] == 'Overlap']
+df = df[df['L'] == min(df['L'])]
+df = df[df['T'] == min(df['T'])]
+
+onesample = df[df['Jhash'] == min(df['Jhash'])]
+
+acc = 0
+for J,Jdf in df.groupby('Jhash'):
+    ax0.plot(Jdf['mc'], Jdf['value'], lw=0.5, alpha=0.2, color=niceblue)
+    acc += 1
+
+print("Used %d samples" % acc)
+
+ax0.plot(onesample['mc'], onesample['value'], lw=0.5, color=nicered)
+
+ax0.set_xscale('log')
+
+
+ax1.hist(df[df['mc'] > 1e8]['value'], orientation='horizontal')
+ax1.set_yticklabels([])
+ax1.set_xticks([])
+ax1.spines['bottom'].set_visible(False)
+
+ax1.set_xlabel('P(q)')
+
+ax0.set_ylabel('q')
+ax0.set_xlabel('MC')
+
+plt.tight_layout()
+plt.savefig('overlap.pdf')
