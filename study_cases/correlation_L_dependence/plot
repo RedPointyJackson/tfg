@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+
+def cm2inch(value):
+    return value/2.54
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import matplotlib as mpl
+import numpy as np
+lsc = mpl.colors.LinearSegmentedColormap
+
+plt.style.use('custom')
+
+
+quenchmemento = pd.read_csv('../../data/finaldata/memento_quench.csv')
+quenchjanus = pd.read_csv('../../data/finaldata/janus_quench.csv')
+quench = pd.concat([quenchmemento, quenchjanus], ignore_index=True)
+
+
+niceblue   = '#64B5CD'
+nicered    = '#C44E52'
+niceyellow = '#CCB974'
+
+plt.style.use('custom')
+
+colormap = lsc.from_list('foo',[(0.0,niceblue),
+                                (0.5,niceyellow),
+                                (1.0,nicered)])
+
+maxL, minL = quench['L'].max(), quench['L'].min()
+
+def get_color(L):
+    ℓ = (np.log10(L)-np.log10(minL))/(np.log10(maxL)-np.log10(minL))
+    return colormap(ℓ)
+
+
+fig = plt.figure(figsize=(cm2inch(15),cm2inch(6.5)))
+# Low t
+
+ax = fig.add_subplot(121)
+
+df = quench[quench['observable'] == 'Correlation']
+df = df[df['parameter'] == 10000]
+df = df[df['T'] > 0.89]
+
+# Count replicas
+for L,Ldf in df.groupby('L'):
+    print("replicas for L=%d (<40 -> * 20): %d" % (L, len(Ldf[Ldf['mc'] == 1])))
+
+
+df = df.groupby(['L','mc']).mean().reset_index()
+
+for L,Ldf in df.groupby('L'):
+    ax.plot(Ldf['mc'], Ldf['value'], label=L, lw=1, color=get_color(L))
+
+ax.set_xscale('log')
+
+ax.set_ylabel('[C]')
+ax.set_xlabel(r'$t_w (t_0=10^4)$')
+
+ax.set_yticks([0.25,0.5,0.75,1])
+ax.set_ylim(0,0.75)
+
+
+#High t
+
+ax = fig.add_subplot(122)
+
+df = quench[quench['observable'] == 'Correlation']
+df = df[df['parameter'] == 100000000]
+df = df[df['T'] > 0.89]
+df = df.groupby(['L','mc']).mean().reset_index()
+
+for L,Ldf in df.groupby('L'):
+    print("Doing L =",L)
+    ax.plot(Ldf['mc'], Ldf['value'], label=L, lw=1, color=get_color(L))
+
+ax.set_xscale('log')
+ax.set_yticklabels([])
+
+ax.set_xlabel(r'$t_w (t_0=10^8)$')
+
+legend = ax.legend(title='L', fontsize=10)
+legend.get_frame().set_facecolor('w')
+legend.get_frame().set_linewidth(0.0)
+
+
+ax.set_yticks([0.25,0.5,0.75,1])
+ax.set_ylim(0,0.75)
+
+fig.savefig('corrwithL.pdf')
