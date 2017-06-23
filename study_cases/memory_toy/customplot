@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+
+STEPS = 1e3
+
+# Imports
+def cm2inch(value):
+    return value/2.54
+
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import pandas as pd
+import numpy as np
+import seaborn.apionly as sns
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+
+niceblue   = '#64B5CD'
+nicered    = '#C44E52'
+niceyellow = '#CCB974'
+
+plt.style.use('custom')
+
+A     = pd.read_csv('annealA.csv').groupby('mc').mean().reset_index()
+Aleft = A[A['mc'] < STEPS]
+B     = pd.read_csv('annealB.csv').groupby('mc').mean().reset_index()
+C     = pd.read_csv('annealC.csv').groupby('mc').mean().reset_index()
+
+A['χ'] = (1-A['value'])/A['T']
+Aleft['χ'] = (1-Aleft['value'])/Aleft['T']
+B['χ'] = (1-B['value'])/B['T']
+C['χ'] = (1-C['value'])/C['T']
+
+
+fig = plt.figure(figsize=(cm2inch(15),cm2inch(8)))
+ax = plt.gca()
+
+# General plot
+
+
+ax.plot(A['mc']         , A['χ']     , '--' , lw=1 , color=niceblue)
+ax.plot(Aleft['mc']     , Aleft['χ'] , '-'  , lw=1 , color=niceblue)
+ax.plot(STEPS+B['mc']   , B['χ']     , '-'  , lw=1 , color=niceblue)
+ax.plot(2*STEPS+C['mc'] , C['χ']     , '-'  , lw=1 , color=niceblue)
+
+ax.plot(STEPS+C['mc']   , C['χ']     , '--' , lw=1 , color=niceyellow)
+
+ax.set_ylim(0.2,0.45)
+ax.set_xlabel(r'$t_w$')
+ax.set_ylabel(r'$[χ]$')
+
+# Inset
+
+iax = fig.add_axes([0.6,0.6,0.3,0.3])
+
+iax.plot(A['mc'],A['χ'], lw=1, color=niceblue)
+iax.plot(STEPS+C['mc'],C['χ'], lw=1, color=niceyellow)
+iax.set_ylim(0.27,0.28)
+iax.set_xlim(STEPS/2, 2*STEPS)
+iax.set_xticks([])
+iax.set_yticks([])
+
+# Notes
+
+ax.text(400,0.30, '$T_1=0.9$',color='gray')
+ax.text(1500,0.22,'$T_2=0.5$',color='gray')
+ax.text(2400,0.28,'$T_3=T_1=0.9$',color='gray')
+
+# Square zoom
+mark_inset(ax, iax, loc1=2, loc2=4, fc="none", ec="0.8")
+
+
+fig.savefig('memorytoy.pdf')
