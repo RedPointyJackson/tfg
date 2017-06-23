@@ -1,0 +1,318 @@
+#!/usr/bin/env python3
+
+def cm2inch(value):
+    return value/2.54
+
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+from matplotlib import gridspec
+import pandas as pd
+import numpy as np
+import scipy.optimize as opt
+
+
+niceblue = '#64B5CD'
+nicered = '#C44E52'
+niceyellow = '#CCB974'
+
+
+import matplotlib as mpl
+lsc = mpl.colors.LinearSegmentedColormap
+colormap = lsc.from_list('foo',[(0.0,niceblue),
+                                (0.5,niceyellow),
+                                (1.0,nicered)])
+
+
+plt.style.use('custom')
+
+def getdf(L):
+    df = pd.read_csv('memento_quench.csv')
+    df = df[df['observable'] == 'Spatial_correlation']
+    df = df[df['T'] == 0.7]
+    df = df[df['L'] == L]
+    df = df.groupby(['mc','parameter']).mean().reset_index()
+    return df
+
+df = getdf(12)
+
+
+def get_color_r(r):
+    minr, maxr = df['parameter'].min(), df['parameter'].max()
+    R = (r-minr)/(maxr-minr)
+    return colormap(R)
+
+def get_color_tw(tw):
+    mintw, maxtw = np.log10(df['mc'].min()), np.log10(df['mc'].max())
+    τ = (np.log10(tw)-mintw)/(maxtw-mintw)
+    return colormap(τ)
+
+
+print("Doing general plot...")
+fig = plt.figure(figsize=(cm2inch(15),cm2inch(7)))
+gs = gridspec.GridSpec(1, 2, width_ratios=[1, 2])
+axL = plt.subplot(gs[0])
+axξ = plt.subplot(gs[1])
+
+for r,rdf in df.groupby('parameter'):
+    if r <= 6 and r!= 0:
+        print("Plotting r = ", r)
+        axL.plot(rdf['mc'], rdf['value'], lw=0.5, color=get_color_r(r), label=r)
+
+axL.set_ylabel(r'$[C_4(r,t_w)$]')
+axL.set_xlabel(r'$t_w$')
+axL.set_xscale('log')
+axL.set_yscale('log')
+axL.set_ylim(ymax=1)
+
+# Wonderful. Now, ξ things.
+def getξ(df,
+         α = 0.4, # Sergio proposed this values.
+         β = 1.5):
+    """This thing returns a dataframe with tw and ξ. The dataframe
+    also contains a column with errors, if they apply, and the method
+    used (integration or fit). It suposes a df with columns 'mc',
+    'parameter' (the r) and 'value (the C₄)."""
+
+    # Way 1: Integrals.
+    def I(k,C4vals,rvals,tail=True):
+        acc = 0
+        for i in range(len(C4vals)):
+            if rvals[i] > rvals[-1]/2: break
+            acc += rvals[i]**k * C4vals[i]
+        return acc
+
+    integraltwlist = []
+    integralξlist  = []
+    for tw,twdf in df.groupby('mc'):
+        rvals = np.array(twdf['parameter'])
+        C4vals = np.array(twdf['value'])
+        I1=I(1,C4vals,rvals)
+        I2=I(2,C4vals,rvals)
+        ξ=I2/I1
+        integralξlist.append(ξ)
+        integraltwlist.append(tw)
+
+    integraldf = pd.DataFrame({'tw'     : integraltwlist,
+                               'ξ'      : integralξlist,
+                               'σ'      : 0,
+                               'method' : 'Integration'})
+
+    # Way 2: fits.
+    fittwlist = []
+    fitξlist  = []
+
+    def fitfunc(x, A,ξ):
+        return A/x**α * np.exp(-((x/np.abs(ξ)**β)))
+
+    maxr = df['parameter'].max()
+    for tw,twdf in df.groupby('mc'):
+        insidebounds = [1<=r<=(maxr+1)/2 for r in twdf['parameter']]
+        twdf = twdf[insidebounds]
+        rvals = np.array(twdf['parameter'])
+        C4vals = np.array(twdf['value'])
+        popt, pcov = opt.curve_fit(fitfunc,rvals,C4vals,
+                                bounds=[(0,0),(1,maxr)])
+        perr = np.sqrt(np.diag(pcov))
+        fittwlist.append(tw)
+        fitξlist.append((popt[1],perr[1]))
+
+
+    fitξvals = np.array([ξ[0] for ξ in fitξlist])
+    fitξerr  = np.array([ξ[1] for ξ in fitξlist])
+
+    fitdf = pd.DataFrame({'tw'     : fittwlist,
+                          'ξ'      : fitξvals,
+                          'σ'      : fitξerr,
+                          'method' : 'Fitting'})
+
+    return integraldf.append(fitdf)
+
+ξdf         = getξ(df)
+integralξdf = ξdf[ξdf['method'] == 'Integration']
+fitξdf      = ξdf[ξdf['method'] == 'Fitting']
+
+axξ.plot(integralξdf['tw'], integralξdf['ξ'], lw=0.5,color=niceblue)
+
+axξ.plot(fitξdf['tw'], fitξdf['ξ'],
+                 lw=0.5, color=nicered)
+
+axξ.fill_between(fitξdf['tw'],
+                 fitξdf['ξ']+fitξdf['σ'], fitξdf['ξ']-fitξdf['σ'],
+                 color=nicered, alpha=0.4)
+
+# Label and exit.
+axξ.set_ylim(0,2*df['parameter'].max())
+
+axξ.set_ylabel(r'$ξ$')
+axξ.set_xlabel(r'$t_w$')
+axξ.set_xscale('log')
+
+redpoint  = plt.Line2D((0,1),(0,0), color=nicered,  marker='o', ms=2.5, linestyle='')
+bluepoint = plt.Line2D((0,1),(0,0), color=niceblue, marker='o', ms=2.5, linestyle='')
+
+legend = axξ.legend([redpoint, bluepoint], ['Ajuste', 'Integral'],
+                    loc='upper left', title='Método', fontsize=10)
+legend.get_frame().set_facecolor('w')
+legend.get_frame().set_linewidth(0.0)
+
+fig.savefig('C4.pdf')
+
+# Do it also for the other L's
+print("Computing for every L...")
+
+fig = plt.figure(figsize=(cm2inch(15),cm2inch(9)))
+ax = plt.gca()
+
+for L in [6,8,12]:
+    print("Doing L=%d" % L)
+    ξdf         = getξ(getdf(L))
+    integralξdf = ξdf[ξdf['method'] == 'Integration']
+
+    tw = integralξdf['tw']
+    ξ = integralξdf['ξ']
+    ax.plot(tw, ξ, lw=1)
+
+
+# Add Sergio data
+
+sergiotw = [
+    7.438319028254388  ,
+    10.618008048926898 ,
+    15.212043044802323 ,
+    21.289106755940406 ,
+    30.244277090295235 ,
+    43.55032113483349  ,
+    61.880631829822136 ,
+    86.99596096015027  ,
+    123.28142151380374 ,
+    177.517385592918   ,
+    251.56211084452295 ,
+    357.44363321396594 ,
+    509.2419657338381  ,
+    721.6681022386846  ,
+    1009.1793751942347 ,
+    1433.9516733784646 ,
+    2037.4948893270732 ,
+    2954.307781170425  ,
+    4197.722352407703  ,
+    5877.291971992413  ,
+    8416.39002691042   ,
+    11760.504708884439 ,
+    16992.85302951298  ,
+    24145.305325315585 ,
+    34308.13471872905  ,
+    48848.26331161764  ,
+    68170.87903412315  ,
+    96863.03576246728  ,
+    137264.94936026388 ,
+    197651.89894221793 ,
+    278285.0144606052  ,
+    399048.4293487985  ,
+    568374.9843322351  ,
+    794990.0596462757  ,
+    1158848.2473962668 ,
+    1605035.1306379312 ,
+    2311082.707562385  ,
+    3275813.3919600938 ,
+    4728460.884458701  ,
+    6778036.061063043  ,
+    9630785.485176207  ,
+    13189524.033971306 ,
+    18968516.755739007 ,
+    27080749.04442138  ,
+    38398515.17822777  ,
+    54157648.98448915  ,
+    77520867.45686561  ,
+    109338578.98745312 ,
+    156503353.70686275 ,
+    219350531.43873188 ,
+    317523081.65093553 ,
+    450878145.44354135 ,
+    637920632.5829395  ,
+    901559748.1357439  ,
+    1287818501.8631666 ,
+    1792587794.2098274 ,
+    2599865549.737612  ,
+    3717613397.2030077 ,
+    5083615864.170101  ,
+    6564159814.20689   ,
+    8748884467.383856  ]
+
+sergioξ = [
+    1.468898516530383  ,
+    1.529109706950864  ,
+    1.5876802737017832 ,
+    1.6484898648750694 ,
+    1.7083994777006721 ,
+    1.7694837021463612 ,
+    1.8269919990500323 ,
+    1.8871000720348279 ,
+    1.9421421073260652 ,
+    2.0083337431356174 ,
+    2.0708722183169184 ,
+    2.137439608824457  ,
+    2.205588916764323  ,
+    2.2810332243703346 ,
+    2.3534382977965764 ,
+    2.432151263363556  ,
+    2.5100642179014985 ,
+    2.591370538917274  ,
+    2.6708151343824813 ,
+    2.7552285749030303 ,
+    2.853160862770448  ,
+    2.9430117492870664 ,
+    3.0554230696173548 ,
+    3.157876879053988  ,
+    3.2616152680727786 ,
+    3.367777820693833  ,
+    3.483196145508297  ,
+    3.591417846304945  ,
+    3.6998783704028915 ,
+    3.8235468700351625 ,
+    3.929102278757457  ,
+    4.073234323841144  ,
+    4.1775990295232965 ,
+    4.320238765727294  ,
+    4.453641753035468  ,
+    4.599670016631077  ,
+    4.737120769890333  ,
+    4.9015744691853955 ,
+    5.053890610820993  ,
+    5.21839601061796   ,
+    5.378134666379979  ,
+    5.54748603112719   ,
+    5.725361246157138  ,
+    5.881884160643574  ,
+    6.102052260200178  ,
+    6.260099683363827  ,
+    6.456815322476668  ,
+    6.6447220479789255 ,
+    6.834082018879058  ,
+    7.037379583108426  ,
+    7.267477988789664  ,
+    7.515647764545608  ,
+    7.739846149075792  ,
+    7.924568059887877  ,
+    8.146156082903255  ,
+    8.335602539242066  ,
+    8.597108021014312  ,
+    8.811750810164483  ,
+    9.031765443260966  ,
+    9.402143948724294  ,
+    9.490003576891532  ]
+
+
+
+ax.plot(sergiotw, sergioξ, '--', lw=1)
+
+ax.text(1e7 , 1.2,  'L = 6', fontsize=10, color='gray')
+ax.text(1e7 , 1.8,  'L = 8', fontsize=10, color='gray')
+ax.text(1e7 , 2.8  ,  'L = 12', fontsize=10, color='gray')
+ax.text(2e6 , 4  ,  'L = 80', fontsize=10, color='gray')
+
+ax.set_ylabel(r'$ξ$')
+ax.set_xlabel(r'$t_w$')
+ax.set_xscale('log')
+ax.set_ylim(0,5)
+
+fig.savefig('C4_with_size.pdf')
