@@ -1,5 +1,3 @@
-# Best served with L=8
-
 SAMPLES="500"
 
 DIR="study_cases/memory_toy/"
