@@ -8,7 +8,7 @@ currentprojection=perspective(1,0.5,0.3);
 // Colors
 pen niceblue = rgb("3188A2");
 pen niceyellow = rgb("8E7D42");
-pen nicegray = rgb("767886");
+pen nicegray = rgb("AAAAAA");
 
 real sep = 0.85;
 real spinsize = 0.1;
@@ -47,9 +47,9 @@ draw((+spinsize*Z - sep*Z)--(-spinsize*Z - sep*Z) , niceblue, arrow=Arrow3());
 draw((+spinsize*Z + sep*Z)--(-spinsize*Z + sep*Z) , niceblue, arrow=Arrow3());
 
 // J's
-label(Label("+", niceyellow, filltype=Fill(white)), +sep/2*X);
+label(Label("-", niceyellow, filltype=Fill(white)), +sep/2*X);
 label(Label("+", niceyellow, filltype=Fill(white)), -sep/2*X);
-label(Label("-", niceyellow, filltype=Fill(white)), +sep/2*Y);
-label(Label("-", niceyellow, filltype=Fill(white)), -sep/2*Y);
+label(Label("+", niceyellow, filltype=Fill(white)), +sep/2*Y);
+label(Label("+", niceyellow, filltype=Fill(white)), -sep/2*Y);
 label(Label("+", niceyellow, filltype=Fill(white)), +sep/2*Z);
-label(Label("+", niceyellow, filltype=Fill(white)), -sep/2*Z);
+label(Label("-", niceyellow, filltype=Fill(white)), -sep/2*Z);
