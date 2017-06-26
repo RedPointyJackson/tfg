@@ -95,7 +95,14 @@
 
 \chapter{Introducción}
 
-Los vidrios de espín (\textit{spin glasses}) son materiales
+Los vidrios de espín
+% TODO: REF 1
+% Spin Glasses and Random Fields, edited by A. P. Young World
+% Scientific, Singapore, 1997.
+% TODO REF 2
+% J. P. Bouchaud, L. Cugliandolo, J. Kurchan, and M. Mézard, in Spin
+% Glasses and Random Fields
+(\textit{spin glasses}) son materiales
 caracterizados por el inusual comportamiento de sus momentos
 magnéticos. En lugar de mostrar un alineamiento regular de éstos, como
 los materiales ferromagnéticos o los antiferromagnéticos, los momentos
@@ -111,23 +118,26 @@ efectos que se estudian en esta memoria: la \emph{memoria} y el
 especialmente ilustrativo considerar dos tipos de experimento
 (figura~\ref{fig:experimental}).
 
-En el \textit{dip protocol}~\cite{dippaper} medimos la curva de la
-parte imaginaria de la susceptibilidad $χ''$ en función de la
-temperatura de tres formas distintas.
+En el \textit{dip experiment protocol}~\cite{dippaper} se mide la
+parte imaginaria de la susceptibilidad magnética $χ''=χ \sin φ$, donde
+$φ$ es el desfase entre el campo $H$ aplicado y la magnetización $M$
+de la muestra. La medición, que depende de la temperatura, se realiza
+de la siguiente manera:
 
 En primer lugar, recorremos el rango de temperaturas enfriando o
 calentando el sistema a un ritmo constante, obteniendo la curva de
 referencia. En segundo lugar, medimos enfriando el sistema a un ratio
-determinado, pero cesando el enfriamiento por un momento a una
-temperatura $T=\SI{12}{\K}$ y retomándolo después; durante el tiempo
-que se deja reposar al sistema a temperatura constante $χ''$ decae,
-efecto conocido como envejecimiento. Por último, volvemos a medir
-$χ''(T)$ esta vez calentando el sistema a un ratio determinado y sin
-detenernos en $T=\SI{12}{\K}$. Sorprendentemente, el sistema
-``recuerda'' (efecto de memoria) que su enfriamiento se cesó a
-$T=\SI{12}{\K}$ y en lugar de seguir la curva de referencia medida, sigue
-la de enfriamiento, volviendo a decrecer su susceptibilidad en
-$T=\SI{12}{\K}$ la misma cantidad que decreció en el enfriamiento.
+determinado, pero cesando el enfriamiento durante un tiempo a una
+temperatura elegida (en el caso mostrado, $T=\SI{12}{\K}$) y
+retomándolo después; durante el tiempo que se deja reposar al sistema
+a temperatura constante $χ''$ decae, efecto conocido como
+envejecimiento. Por último, volvemos a medir $χ''(T)$ esta vez
+calentando el sistema al mismo ratio y sin detenernos en
+$T=\SI{12}{\K}$. Sorprendentemente, el sistema ``recuerda'' (efecto de
+memoria) que su enfriamiento se cesó a $T=\SI{12}{\K}$ y en lugar de
+seguir la curva de referencia medida sigue la de enfriamiento anterior,
+volviendo a decrecer su susceptibilidad en $T=\SI{12}{\K}$ la misma
+cantidad que decreció en el enfriamiento.
 
 En el protocolo de dos temperaturas~\cite{threeprotocolpaper}
 comenzamos con un vidrio de espín a temperatura $T_1=\SI{12}{\K}$.
@@ -139,7 +149,7 @@ crecimiento súbito, efecto al que en contraposición con el
 envejecimiento se le llama rejuvenecimiento. Por último, tras dejar
 decrecer a $χ''$ por un tiempo a $T_2$, volvemos a calentar al sistema
 a $T_1$. El sistema recupera de forma rápida la $χ''$ que tenía cuando
-se pasó de $T_1$ a $T_2$, y continua la evolución como si nunca
+se pasó de $T_1$ a $T_2$, y continúa la evolución como si nunca
 hubiera existido la fase a $T_2$, con la misma pendiente.
 
 
@@ -157,7 +167,7 @@ hubiera existido la fase a $T_2$, con la misma pendiente.
       CdCr\textsubscript{1.7}In\textsubscript{0.3}S\textsubscript{4}
       para la parte imaginaria $χ''$ y real $χ'$ de la
       susceptibilidad. En la figura izquierda (tomada de la figura 1
-      de~\cite{dippaper}) vemos el \textit{dip protocol} y en la
+      de~\cite{dippaper}) vemos el \textit{dip experiment protocol} y en la
       derecha (tomada de la figura 1 de~\cite{threeprotocolpaper})
       el protocolo de dos temperaturas.}
   \label{fig:experimental}
@@ -166,9 +176,9 @@ hubiera existido la fase a $T_2$, con la misma pendiente.
 \section{Modelo}
 Los primeros vidrios de espín~\cite{canella} que se estudiaron en los
 años 70 consistían en metales nobles impurificados con metales de
-transición. Las impurezas crean perturbaciones aleatorias en la
+transición, como por ejemplo el CuMn. Las impurezas crean perturbaciones aleatorias en la
 red cristalina modelables mediante el \emph{modelo RKKY}, que propone
-una interacción de canje entre dos momentos magnéticos a distancia $r$ de la forma
+una interacción entre dos momentos magnéticos a distancia $r$ de la forma
 \begin{equation}
   J(r) ∝ \frac{\cos(2K\sub{F} r)}{r^3}
 \end{equation}
@@ -183,7 +193,7 @@ de lado con espaciado regular, como propusieron Edwards y
 Anderson~\cite{mranderson}. Supondremos únicamente interacciones a
 primeros vecinos (figura~\ref{fig:EA}) y condiciones de contorno
 periódicas, de forma que cada espín $s_i$ interactúe con sus seis
-vecinos $s_j$ mediante un hamiltoniano
+vecinos $s_j$ más proximos mediante un hamiltoniano
 \begin{figure}
   \centering
   \includegraphics{../study_cases/EAfigure/EAfigure.pdf}
@@ -218,7 +228,7 @@ una sola muestra se denotan como ``$\expval{\ }$''.
 Para estudiar la memoria y el rejuvenecimiento, se definieron y
 midieron diversos observables del sistema. Es especialmente
 interesante el comportamiento de estas magnitudes en el protocolo
-de dos de temperaturas al que se someterá a los vidrios de espín,
+de dos temperaturas al que se someterá a los vidrios de espín,
 \begin{equation*}
   T_1 → T_2 → T_1
 \end{equation*}
@@ -229,29 +239,41 @@ La energía, de forma similar al hamiltoniano del sistema, se define como
 \begin{equation}
   E = - \frac{1}{V} \sum_{\expval{i,j}}  J_{ij} s_i s_j
 \end{equation}
-con $V=L^{-3}$ y tomando valores entre $-1$ y $1$, es indispensable para actualizar los
-espines en cada iteración del algoritmo de Metropolis-Hasting. Tiene
-un comportamiento suave, lo que la hace útil para comprobar si la
-simulación ha transcurrido de forma normal, los datos no se han
-corrompido al guardarlos, etc.
+con $V=L^{-3}$ y tomando valores entre $-1$ y $1$, es indispensable
+para actualizar los espines en cada iteración del algoritmo de
+Metropolis-Hasting~\cite{metropolis}. Tiene un comportamiento suave,
+lo que la hace útil para comprobar si la simulación ha transcurrido de
+forma normal, los datos no se han corrompido al guardarlos, etc.
 
 En los sistemas ferromagnéticos es de especial interés la
 magnetización del sistema, aquí definida como
 $\frac{1}{V}\sum_{i}σ_i$, por ser el parámetro de orden. No obstante,
-los vidrios de espín tienen una magnetización global nula, de forma
-que es necesario definir como parámetro de orden el \textit{overlap} entre
-los espines $s^a_i, s_i^b$ de dos réplicas a y b como
+en los vidrios de espín los espines se congelan por debajo de
+$T\sub{C}$ con magnetización global es nula~\cite{binder}, de forma
+que es necesario definir como parámetro de orden el \textit{overlap}
+entre los espines $s^a_i, s_i^b$ de dos réplicas a y b como
 \begin{equation}
-  q = \frac{1}{V} \sum_{i} s^a_i, s_i^b
+  q = \frac{1}{V} \sum_{i} s^a_i s_i^b
 \end{equation}
 donde se define como pareja de réplicas a dos sistemas con los mismos
 acoplos $J_{ij}$ pero que han evolucionado de forma independiente, con
 distintos números aleatorios en el proceso. Es una magnitud
-comprendida entre $-1$ y $1$, que para tiempos mayores a las $10^8$
-iteraciones de Montecarlo fluctúa alrededor de $q=0$ con media nula,
-como puede verse más adelante en la figura~\ref{fig:overlap}. La distribución del
-\textit{overlap} es objeto de debate, habiéndose propuesto una forma de doble
-pico con o sin un continuo de estados en medio.
+comprendida entre $-1$ y $1$, cuyo valor en las simulaciones fluctúa
+alrededor de $q=0$ con media nula, como puede verse más adelante en la
+figura~\ref{fig:overlap}. La distribución del \textit{overlap} es
+objeto de debate, habiéndose propuesto diferentes teorías a lo largo
+de la historia de los vidrios de espín; las dos principales teorías en
+las que se trabaja en la actualidad son la teoría
+RSB~\cite{Marinari2000}\cite{mezard1987spin}, de las siglas inglesas
+\textit{replica simmetry breaking}, y la \textit{droplet
+  picture}~\cite{cmonman}.
+
+La teoría \textit{RSB} propone un número infinito de estados en
+equilibrio, de forma que la distribución $P(q)$ del \textit{overlap}
+es no trivial y posee un continuo de estados entre dos máximos
+simétricos. En cambio, en el \textit{droplet scenario} solo existe un
+estado fundamental (salvo por una inversión de todos los espines) y
+$P(q)$ consiste en dos deltas de Dirac.
 
 La correlación a dos tiempos $t_w, t_w+t_0$ se define como
 \begin{equation}
@@ -269,11 +291,11 @@ correlación como
 \begin{equation}
   χ(t_w, t_w+t_0) = β(1-C)
 \end{equation}
-donde $β=1/\kb T$ . Si bien este resultado sólo es válido en
+donde $β=1/\kb T$ . Si bien este resultado solo es válido en
 equilibrio térmico, condición extremadamente difícil de alcanzar en
 sistemas con alta frustración como los vidrios de espín, se puede
 extender fácilmente fuera de él multiplicando por una función $X$ que
-sólo depende de los tiempos $t_1,t_2$ empleados en la correlación. En
+solo depende de los tiempos $t_1,t_2$ empleados en la correlación. En
 este trabajo, no se ha realizado dicha corrección por estar fuera de
 los objetivos fijados y requerir un análisis más profundo de estos
 sistemas.
@@ -304,17 +326,18 @@ puede explorar el espacio de configuraciones\footnote{ Temperaturas
   altos para $β=1/\kb T$ crean un \textit{underflow} en el cálculo de
   $\exp(-βE)$, es decir, el procesador no puede distinguir $\exp(-βE)$
   de cero. No obstante, se ha comprobado que el límite está en
-  $T=1/60$, muy inferior a las temperaturas usadas. } y asignándoles
-probabilidades $e^{-β \Ham}$ con $β=1/\kb T$ las magnitudes del
+  $T=1/60$, muy inferior a las temperaturas usadas. }, y asignándoles
+probabilidades $e^{-β \Ham}$ con $β=1/\kb T$ \  las magnitudes del
 sistema introducidas pueden aproximarse mediante un algoritmo como el
 de Metrópolis-Hasting~\cite{metropolis}: es simple de implementar,
 acerca al sistema a la termalización antes que otros algoritmos como
 el \textit{Heat bath} y es muy eficiente computacionalmente. El
-algoritmo requiere una gran cantidad de numeros aleatorios, cuya
+algoritmo requiere una gran cantidad de números aleatorios, cuya
 calidad se comprobó exhaustivamente (Apéndice \ref{chap:random}). Cada
-iteración del algoritmo equivale a aproximadamente un
-picosegundo~\cite{tiempos}, lo que limita los intervalos temporales en
-el estudio de estos sistemas a las décimas de segundo.
+iteración del algoritmo equivale a aproximadamente un picosegundo de
+evolución en un experimento~\cite{tiempos}, lo que limita los
+intervalos temporales en el estudio de estos sistemas a las décimas de
+segundo.
 
 Los cálculos se realizaron en el \textit{cluster} Memento y en el
 ordenador de propósito específico Janus~\cite{janus}, basado en
@@ -331,15 +354,15 @@ muestras, lo que se consiguió de forma diferente en cada arquitectura:
   \textit{multispin coding}~\cite{onetruemultispincoding}
   (Apéndice~\ref{chap:multispin}) permiten simular miles de muestras
   simultáneamente.
-\item En Janus, sólo es posible simular del orden de una centena de
+\item En Janus, solo se ha podido simular del orden de una centena de
   vidrios de espín simultáneamente. No obstante, se utilizó para retículos
   grandes ($L>40$), en los que los efectos de tamaño finito son mucho
   menos notables y las fluctuaciones de los observables son menores,
   requiriendo promedios entre muchas menos muestras (decenas) para
   conseguir la misma incertidumbre en las medidas.
 \end{itemize}
-Tanto Memento como Janus resultan ineficaces para realizar
-simulaciones pequeñas, por lo que éstas se realizaron en un PC
+Para simulaciones de tiempos cortos y retículos pequeños que no
+requieron la potencia de cálculo de Memento y Janus se empleó un PC
 doméstico.
 
 Se decidió realizar todas las simulaciones bajo un protocolo
@@ -355,33 +378,41 @@ de dos temperaturas como el de la figura \ref{fig:experimental}:
   sistema a $T_1$. Se le deja permanecer a esta temperatura $10^8$
   iteraciones para poder observar la memoria del sistema.
 \end{enumerate}
-Además, hay realizar una simulación de referencia a $T=T_1=\text{cte.}$
+Además, se realizó una simulación de referencia a $T=T_1=\text{cte.}$
 con la que comparar la susceptibilidad para medir rejuvenecimiento y memoria.
 
 En dicho protocolo, se simuló
 $t_w^1 ∈\{10^4, 10^5, 10^6, 10^7, 10^8\}$,
 $T_1∈\{0.9, 0.8, 0.7, 0.6\}$, $T_2∈\{0.8,0.7.0.6\}$ y se empleó
-$t_0∈\{10^4, 10^5, 10^6, 10^7,10^8\}$. Se emplearon varios tamaños $L$
+$t_0∈\{10^4, 10^5, 10^6, 10^7,10^8\}$. Hay que notar que las $t_0 ≫
+t_w$ no son accesibles experimentalmente, pero por completitud se
+incluyeron en el análisis.
+
+Se emplearon varios tamaños $L$
 de retículo para la simulación de referencia, $L∈\{4,6,8,12\}$ en
 Memento y $L∈\{8,48,80\}$ en Janus. El protocolo de dos temperaturas
 pudo completarse hasta $t_w^2$ para $L∈\{8,12,48,80\}$ y más allá para
 $L∈\{8,48,80\}$.
-
 Como valor para $t_w^2$, se escogió $t_w^1 + 10^8$ para las redes de
 Memento y $2×10^8$ para las redes de Janus.
 
+Más adelante se definirán magnitudes escalares que permitan
+cuantificar la memoria y el rejuvenecimiento con objeto de realizar un
+análisis de sus dependencias funcionales con $t_w^1$, $t_0$ y
+$\frac{T_1-T_2}{T_1}$.
 
 
 \chapter{Desarrollo}
 
 Los tiempos de simulación y medición de magnitudes llegan a la semana
-para algunos tamaños de sistema, por lo que es imprescindible una
+para algunos tamaños del sistema, por lo que es imprescindible una
 buena organización a la hora de programar las simulaciones y las
 medidas. Además, es importante comprobar que los sistemas están
 evolucionando como se espera, sin fallos de \textit{software} o
 \textit{hardware} que invaliden los resultados. Por ello, mientras se
-obtenían las configuraciones de espines, se comprobó que todos los
-observables del sistema tenían el comportamiento esperado.
+obtenían las configuraciones de espines se comprobó que todos los
+observables del sistema tenían el comportamiento esperado, como se
+verá a continuación.
 
 \section{Comportamiento de los observables}
 
@@ -422,9 +453,9 @@ sistema se acerca lentamente al equilibrio térmico.
   \centering
   \includegraphics{../study_cases/corr_functional_dependence/corrfunction.pdf}
   \caption{Correlación para un sistema $L=32$ promediada sobre 210
-    muestras. Se muestra en la escala de color el parámetro ($t_w$ o
-    $t_0$) no empleado en el eje horizontal. Ambos parámetros toman
-    valores $t_0,t_w∈[10^0, 10^{0.1},10^{0.2},\ldots,10^{2.9},10^3]$.}
+    muestras. Se muestra en la escala de color el parámetro ($t_0$ o
+    $t_w$) no empleado en el eje horizontal. Ambos parámetros toman
+    valores $t_0,t_w∈[1, 10^3]$.}
   \label{fig:corrfunction}
 \end{figure}
 
@@ -438,7 +469,7 @@ monótonamente con $L$ para $t_w→∞$.
   \includegraphics{../study_cases/correlation_L_dependence/corrwithL.pdf}
   \caption{Correlación a $T=0.9$ promediada sobre más de 1000 muestras
     para $L<40$ y sobre más de 30 para $L>20$ (color en el original).
-    Para $t_0$ y $t_w$ bajos las medidas de la correlación están menos
+    Para $t_0$ y $t_w$ bajos, las medidas de la correlación están menos
     afectadas por la $L$ del sistema.}
   \label{fig:corrfunction_L}
 \end{figure}
@@ -446,7 +477,7 @@ monótonamente con $L$ para $t_w→∞$.
 
 La correlación espacial es especialmente interesante para
 saber si la muestra va a mostrar unos efectos de tamaño finito
-fuertes, ya que con ella se puede hallar una longitud de correlación
+fuertes, ya que con ella se puede hallar la longitud de correlación
 $ξ$ mediante el ajuste asintótico~\cite{c4fit}
 \begin{equation}
   C_4 (r,t_w) \stackrel{L→∞}{=} \frac{A}{r^α} \exp \left( [-r/ξ(t_w)]^β \right)
@@ -462,17 +493,17 @@ Nótese que no tiene sentido ver el valor de $C_4$ para $r>L/2$, ya que
 las condiciones de contorno periódicas implican que la distancia entre
 dos espines es siempre igual o menor que ese valor. Una longitud de
 correlación cercana a este valor es señal de que el retículo es
-demasiado pequeño como para considerarlo.
+demasiado pequeño como para tenerlo en cuenta.
 
 Se consideró cuál de los métodos para hallar $ξ$ emplear; en la
 figura~\ref{fig:c4} se puede ver un ejemplo de los resultados de ambos
 para un retículo con $L=12$. Se escogió el método mediante integrales
 de la ecuación \eqref{eq:integranator} por ser mucho más preciso para
-$t_w≫10^7$ que el ajuste a la ecuación~\ref{eq:fitotron}.
+$t_w≫10^7$ que el ajuste a la ecuación~\ref{eq:fitotron}~\cite{c4integration}.
 
 En la figura~\ref{fig:C4_with_size} se muestran los resultados
 obtenidos para la longitud de correlación. Como se puede ver, siempre se
-tiene $ξ ≪ L/2$, tal y como se esperaba.
+tiene $ξ ≪ L/2$, tal y como se buscaba.
 
 
 \begin{figure}[!h]
@@ -541,7 +572,7 @@ definición cuantitativa; en la figura \ref{fig:definitions} se
 exponen las posibles definiciones creadas para el protocolo
 de dos temperaturas.
 
-Hasta ahora sólo se han visto ejemplos de rejuvenecimiento
+Hasta ahora solo se han visto ejemplos de rejuvenecimiento
 \emph{fuerte}, en el que la susceptibilidad sube por encima del valor
 que tenía en $T_1$ al cambiar a $T_2$. No obstante, en algunas de las
 mediciones se detectó rejuvenecimiento \emph{débil}, en el que la
@@ -564,12 +595,11 @@ $L<40$. Además, por cada muestra se promediaron dos réplicas.
 
 Antes de analizar los datos tomados, se realizó una pequeña simulación
 con $t_w$ bajo y gran cantidad de estadística para ver cómo se
-manifestaba la memoria en un caso ideal (figura~\ref{fig:memorytoy})
-en la que se aprecia como existe un pequeño tiempo en el que el
-sistema todavía no ha recuperado la curva de referencia. Podemos
-caracterizar ese tiempo $Δt$ viendo cuantas iteraciones pasan hasta
-que ambas curvas se cruzan, obteniéndose una magnitud escalar para la
-memoria.
+manifestaba la memoria en un caso ideal (figura~\ref{fig:memorytoy}).
+En ella se aprecia como existe un pequeño tiempo en el que el sistema
+todavía no ha recuperado la curva de referencia. Podemos caracterizar
+ese tiempo $Δt$ viendo cuántas iteraciones pasan hasta que ambas
+curvas se cruzan, obteniéndose una magnitud escalar para la memoria.
 
 \begin{figure}
   \centering
@@ -625,11 +655,11 @@ figura~\ref{fig:vanishing}, las redes que muestran rejuvenecimiento
 fuerte pasan a mostrar rejuvenecimiento débil al aumentar $t_0$.
 
 La influencia de $T_1-T_2$ no es muy clara para $L>8$, pero para $L=8$
-parece que aumentarla hace disminuir $Δχ$. En todo caso, es el
+parece que aumentar dicha diferencia hace disminuir $Δχ$. En todo caso, es el
 parámetro que menos influye en el rejuvenecimiento, probablemente por
 ser el rango de valores tomados en el resto de parámetros mucho mayor.
 
-Por último, notamos que sólo se ha obtenido rejuvenecimiento fuerte
+Por último, notamos que solo se ha obtenido rejuvenecimiento fuerte
 para $L=48$ y $L=80$, lo que indica que el tamaño de la red es
 relevante en la aparición de este efecto.
 
@@ -653,8 +683,8 @@ relevante en la aparición de este efecto.
 \section{Memoria}
 
 Para explorar la forma funcional de $Δt$, se optó por representarlo en
-función de sus parámetros $t_w^1$, $t_0$ y $\frac{T_2-T_1}{T_1}$
-promediando sobre el resto, de forma que pudieran verse tendencias
+función de $t_w^1$, $t_0$ o $\frac{T_2-T_1}{T_1}$
+y promediar sobre el resto, de forma que pudieran verse tendencias
 generales (figura~\ref{fig:memdep}). Analizando los resultados, vemos
 que $Δt$ crece con $t_0$ y disminuye con $t_w^1$ y con la diferencia
 de temperaturas $T_1, T_2$. Notamos que el comportamiento del retículo
@@ -690,7 +720,11 @@ diversos problemas técnicos que requirieron adaptar las simulaciones
 numerosas veces para evitar la pérdida de datos. Las simulaciones de
 vidrios de espín duran días, aumentando la probabilidad de aparición
 de errores, especialmente en máquinas con varios años de uso como
-Janus.
+Janus. Por ello, se realizaron distintos tests sobre el \textit{software},
+incluyendo la simulación de modelos de Ising, la obtención de los
+valores medios de las ecuaciones de Schwinger-Dyson~\cite{schwinger} y
+el ajuste de la correlación $C(t_w,t_w+t_0)$ a leyes de potencias
+conocidas~\cite{corrparisi}.
 
 En el estudio del rejuvenecimiento, se ha comprobado como el
 rejuvenecimiento fuerte era especialmente frágil, mostrando la mayoría
@@ -705,6 +739,11 @@ que el rejuvenecimiento. En esta magnitud es especialmente claro el
 comportamiento anómalo de retículos pequeños ($L=8$), lo que justifica
 la simulación de sistemas cada vez más grandes y la necesidad de
 recursos computacionales cada vez más potentes.
+
+Por último, me gustaria agradecer en estas líneas al BIFI por
+permitirme realizar parte de las simulaciones en sus instalaciones y a
+la \textit{Janus Collaboration} por cederme tiempo de cómputo en su
+máquina, Janus.
 
 \begin{appendices}
 
@@ -771,7 +810,7 @@ escogió una fracción $f = 1/e$ de los datos, como propone el
 \definecolor{FAILED}{HTML}{B22222}
 
 
-La elección del generador de numeros pseudoaleatorios es crucial para
+La elección del generador de números pseudoaleatorios es crucial para
 realizar una simulación de Montecarlo, ya que puede sesgar
 notablemente los resultados~\cite{randommonte}\cite{randomcoins} o
 convertirse en el cuello de botella del programa si es muy lento.
@@ -779,17 +818,34 @@ convertirse en el cuello de botella del programa si es muy lento.
 A la hora de escoger un generador de números pseudoaleatorios, se primó la
 correctitud en primer lugar y la velocidad en segundo. En la tabla
 y gráfica siguiente pueden verse algunos de los resultados de la suite de tests
-\verb|dieharder|. Si suponemos como hipótesis nula, $H_0$, que el
-generador de números pseudoaleatorios sea indistinguible de uno
-realmente aleatorio, podemos realizar diversos tests sobre los números
-y ver el \textit{p-value} de la distribución obtenida conociendo la
-esperada bajo números realmente aleatorios. Por ejemplo, si lanzamos
-una moneda virtual, esperamos ver una distribución binomial, que
-podemos comparar con la obtenida para hallar el \textit{p-value}.
+\verb|dieharder|~\cite{brown-2013}. Los tests son muy variados, pero a
+modo de ejemplo se muestra la descripción que la propia suite de tests
+provee para el test \verb|diehard craps|:
+
+\begin{verbatim}
+ This is the CRAPS TEST. It plays 200,000 games of craps, finds
+ the number of wins and the number of throws necessary to end
+ each game.  The number of wins should be (very close to) a
+ normal with mean 200000p and variance 200000p(1-p), with
+ p=244/495.  Throws necessary to complete the game can vary
+ from 1 to infinity, but counts for all>21 are lumped with 21.
+ A chi-square test is made on the no.-of-throws cell counts.
+ Each 32-bit integer from the test file provides the value for
+ the throw of a die, by floating to [0,1), multiplying by 6
+ and taking 1 plus the integer part of the result.
+\end{verbatim}
+
+Si suponemos como hipótesis nula, $H_0$, que el generador de números
+pseudoaleatorios sea indistinguible de uno realmente aleatorio,
+podemos realizar diversos tests sobre los números y ver el
+\textit{p-value} de la distribución obtenida conociendo la esperada
+bajo números realmente aleatorios. Por ejemplo, si lanzamos una moneda
+virtual, esperamos ver una distribución binomial, que podemos comparar
+con la obtenida para hallar el \textit{p-value}.
 
 Los propios \textit{p-values} están distribuídos de forma estadística,
 así que esperamos ver fallar incluso a un generador perfecto un tanto
-por ciento determinado de las veces. Esto hace que no sólo halla que
+por ciento determinado de las veces. Esto hace que no solo haya que
 rechazar generadores con un \textit{p-value} muy bajo, sino también
 los que tengan un \textit{p-value} muy alto. La suite de tests, por
 defecto, es conservadora y anuncia como ``débiles'' los tests con
@@ -847,7 +903,7 @@ empleando como periodo $2^{601}-1$, por ser rápido y correcto.
 
 La simulación de vidrios de espín requiere un gran número de réplicas,
 necesitándose correr varias simulaciones en paralelo. La naturaleza
-binaria de los espines, que sólo necesitan un bit para ser
+binaria de los espines, que solo necesitan un bit para ser
 codificados, hace que sea conveniente ``empaquetar'' varios en las
 palabras de 32 o 64 bit de un ordenador en las iteraciones del
 algoritmo de Metrópolis-Hasting~\cite{metropolis} empleado,
@@ -871,9 +927,9 @@ optimizaciones, el algoritmo para actualizar cada espín sería el siguiente:
   aritmética y el cálculo de un número aleatorio.
 \end{enumerate}
 Notar que en el algoritmo se han despreciado los accesos a la memoria
-cache\footnote{Incluso para $L=40$, los datos necesarios (∼L³
+caché\footnote{Incluso para $L=40$, los datos necesarios (∼L³
   palabras de 64 bits para el código empleado) caben cómodamente en la
-  memoria cache de Memento, el ordenador empleado.}.
+  memoria caché de Memento, el ordenador empleado.}.
 
 La primera optimización que se puede realizar consiste en explotar el
 carácter binario de los espines y emplear únicamente operaciones lógicas,
@@ -923,7 +979,7 @@ palabra binaria\footnotemark:
 
 
 Notar como al haber un espín por cada tres posiciones las posibles
-palabras binarias en octal sólo pueden tener los números 0 (000) o 1
+palabras binarias en octal solo pueden tener los números 0 (000) o 1
 (001); cualquier otra alternativa implicaría más de un espín por
 posición. Por este motivo, la representación octal de las palabras
 corresponde directamente a los espines, haciéndola especialmente útil
@@ -1008,8 +1064,8 @@ $σ_i$. En el siguiente apéndice se muestra un ejemplo de implementación.
 \chapter{Código fuente}
 El código fuente de la memoria, incluyendo tanto la librería
 desarrollada para las simulaciones como utilidades para realizarlas,
-junto al código \LaTeX de la memoria y el empleado para generar las
-gráficas, está disponible en un repositorio público de \texttt{GitHub}
+junto al código \LaTeX \ de la memoria y el empleado para generar las
+gráficas, está disponible en un repositorio público de GitHub
 en lugar de en un anexo por ser relativamente extenso:
 \begin{flushright}
   \url{github.com/redpointyjackson/tfg}
