@@ -296,3 +296,248 @@ ax2.set_yticks([])
 
 
 fig.savefig('1D_dependence.pdf')
+
+# For the beamer
+
+fig_L = plt.figure(figsize=(cm2inch(10),cm2inch(5)))
+
+################## x = t
+
+ax = fig_L.add_subplot(1,4,1)
+ax.set_xscale('log')
+
+for p,pdf in trejdf8.groupby(['tw1','Trel']):
+    tw1, Trel = p
+    ax.fill_between(pdf['t'] ,pdf['Δχ_μ']+1.1*pdf['Δχ_σ'] ,pdf['Δχ_μ']-1.1*pdf['Δχ_σ'] , color='w')
+    ax.fill_between(pdf['t'] ,pdf['Δχ_μ']+pdf['Δχ_σ']     ,pdf['Δχ_μ']-pdf['Δχ_σ']     , color=get_color_tw1(tw1))
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_yticks([0.1,0,-0.1,-0.2,-0.3])
+ax.set_xlabel('t₀')
+ax.set_title('L=8', fontsize=12, color='gray')
+ax.set_ylabel('Δχ')
+ax.set_ylim(-0.3,0.1)
+
+
+ax = fig_L.add_subplot(1,4,2)
+ax.set_xscale('log')
+
+for p,pdf in trejdf12.groupby(['tw1','Trel']):
+    tw1, Trel = p
+    ax.fill_between(pdf['t'] ,pdf['Δχ_μ']+1.1*pdf['Δχ_σ'] ,pdf['Δχ_μ']-1.1*pdf['Δχ_σ'] , color='w')
+    ax.fill_between(pdf['t'] ,pdf['Δχ_μ']+pdf['Δχ_σ']     ,pdf['Δχ_μ']-pdf['Δχ_σ']     , color=get_color_tw1(tw1))
+
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_yticks([0.1,0,-0.1,-0.2,-0.3])
+ax.set_yticklabels([])
+ax.set_xlabel('t₀')
+ax.set_title('L=12', color='gray', fontsize=12)
+ax.set_ylabel('')
+ax.set_ylim(-0.3,0.1)
+
+##
+
+ax = fig_L.add_subplot(1,4,3)
+ax.set_xscale('log')
+
+for p,pdf in trejdf48.groupby(['tw1','Trel']):
+    tw1, Trel = p
+    ax.fill_between(pdf['t'] ,pdf['Δχ_μ']+1.1*pdf['Δχ_σ'] ,pdf['Δχ_μ']-1.1*pdf['Δχ_σ'] , color='w')
+    ax.fill_between(pdf['t'] ,pdf['Δχ_μ']+pdf['Δχ_σ']     ,pdf['Δχ_μ']-pdf['Δχ_σ']     , color=get_color_tw1(tw1))
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_yticks([0.1,0,-0.1,-0.2,-0.3])
+ax.set_yticklabels([])
+ax.set_xlabel('t₀')
+ax.set_title('L=48', color='gray', fontsize=12)
+ax.set_ylabel('')
+ax.set_ylim(-0.3,0.1)
+
+##
+
+ax = fig_L.add_subplot(1,4,4)
+ax.set_xscale('log')
+
+for p,pdf in trejdf80.groupby(['tw1','Trel']):
+    tw1, Trel = p
+    ax.fill_between(pdf['t'] ,pdf['Δχ_μ']+1.1*pdf['Δχ_σ'] ,pdf['Δχ_μ']-1.1*pdf['Δχ_σ'] , color='w')
+    ax.fill_between(pdf['t'] ,pdf['Δχ_μ']+pdf['Δχ_σ']     ,pdf['Δχ_μ']-pdf['Δχ_σ']     , color=get_color_tw1(tw1))
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_yticks([0.1,0,-0.1,-0.2,-0.3])
+ax.set_yticklabels([])
+ax.set_xlabel('t₀')
+ax.set_title('L=80', color='gray', fontsize=12)
+ax.set_ylabel('')
+ax.set_ylim(-0.3,0.1)
+
+fig_L.savefig('nonaveraged_forbeamer.pdf')
+
+
+
+
+
+def colortohex(colortuple):
+    r,g,b,α = colortuple
+    R=hex(int(255*r))[2:]
+    G=hex(int(255*g))[2:]
+    B=hex(int(255*b))[2:]
+    return '#' + (R+G+B).upper()
+
+print("Colors (for tikz):")
+print( "1e4" , colortohex(get_color_tw1(1e4)) )
+print( "1e5" , colortohex(get_color_tw1(1e5)) )
+print( "1e6" , colortohex(get_color_tw1(1e6)) )
+print( "1e7" , colortohex(get_color_tw1(1e7)) )
+print( "1e8" , colortohex(get_color_tw1(1e8)) )
+
+
+
+
+
+
+
+fig_C = plt.figure(figsize=(cm2inch(10),cm2inch(5)))
+
+################## x = t
+
+ax = fig_C.add_subplot(1,4,1)
+ax.set_xscale('log')
+
+for p,pdf in trejdf8.groupby(['tw1']):
+    df = pdf.groupby('t').mean().reset_index()
+    ax.plot(df['t'], df['Δχ_μ'], color=get_color_tw1(p))
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_yticks([0.1,0,-0.1,-0.2,-0.3])
+#ax.set_yticklabels([])
+ax.set_xlabel('t₀')
+ax.set_title('L=8', color='gray', fontsize=12)
+ax.set_ylabel('Δχ')
+ax.set_ylim(-0.3,0.1)
+
+
+##
+
+ax = fig_C.add_subplot(1,4,2)
+ax.set_xscale('log')
+
+for p,pdf in trejdf12.groupby(['tw1']):
+    df = pdf.groupby('t').mean().reset_index()
+    ax.plot(df['t'], df['Δχ_μ'], color=get_color_tw1(p))
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_yticks([0.1,0,-0.1,-0.2,-0.3])
+ax.set_yticklabels([])
+ax.set_xlabel('t₀')
+ax.set_title('L=12', color='gray', fontsize=12)
+ax.set_ylabel('')
+ax.set_ylim(-0.3,0.1)
+
+##
+
+ax = fig_C.add_subplot(1,4,3)
+ax.set_xscale('log')
+
+for p,pdf in trejdf48.groupby(['tw1']):
+    df = pdf.groupby('t').mean().reset_index()
+    ax.plot(df['t'], df['Δχ_μ'], color=get_color_tw1(p))
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_yticks([0.1,0,-0.1,-0.2,-0.3])
+ax.set_yticklabels([])
+ax.set_xlabel('t₀')
+ax.set_title('L=48', color='gray', fontsize=12)
+ax.set_ylabel('')
+ax.set_ylim(-0.3,0.1)
+
+##
+
+ax = fig_C.add_subplot(1,4,4)
+ax.set_xscale('log')
+
+for p,pdf in trejdf80.groupby(['tw1']):
+    df = pdf.groupby('t').mean().reset_index()
+    ax.plot(df['t'], df['Δχ_μ'], color=get_color_tw1(p))
+
+ax.set_xticks([1e4,1e6,1e8])
+ax.set_yticks([0.1,0,-0.1,-0.2,-0.3])
+ax.set_yticklabels([])
+ax.set_xlabel('t₀')
+ax.set_title('L=80', color='gray', fontsize=12)
+ax.set_ylabel('')
+ax.set_ylim(-0.3,0.1)
+
+##
+
+
+fig_C.savefig('averaged_forbeamer.pdf')
+
+
+
+
+
+
+
+fig_R = plt.figure(figsize=(cm2inch(10),cm2inch(5)))
+
+
+################## x = (T₂-T₁)/T₁
+
+ax = fig_R.add_subplot(1,4,1)
+ax.set_xscale('linear')
+
+for p,pdf in trejdf8.groupby(['t','tw1']):
+    t,tw1 = p
+    ax.scatter(pdf['Trel'],pdf['Δχ_μ'], s=3, color=get_color_tw1(tw1))
+
+ax.set_xlabel(r'$\Delta T/T_1$')
+ax.set_title('L=8', fontsize=12, color='gray')
+ax.set_xticks([0.4,0.2])
+ax.set_ylabel('Δχ')
+ax.set_ylim(-0.3,0.1)
+
+ax = fig_R.add_subplot(1,4,2)
+ax.set_xscale('linear')
+
+for p,pdf in trejdf12.groupby(['t','tw1']):
+    t,tw1 = p
+    ax.scatter(pdf['Trel'],pdf['Δχ_μ'], s=3, color=get_color_tw1(tw1))
+
+ax.set_xlabel(r'$\Delta T/T_1$')
+ax.set_title('L=12', fontsize=12, color='gray')
+ax.set_xticks([0.4,0.2])
+ax.set_yticklabels([])
+ax.set_ylabel('')
+ax.set_ylim(-0.3,0.1)
+
+ax = fig_R.add_subplot(1,4,3)
+ax.set_xscale('linear')
+
+for p,pdf in trejdf48.groupby(['t','tw1']):
+    t,tw1 = p
+    ax.scatter(pdf['Trel'],pdf['Δχ_μ'], s=3, color=get_color_tw1(tw1))
+
+ax.set_xlabel(r'$\Delta T/T_1$')
+ax.set_title('L=48', fontsize=12, color='gray')
+ax.set_xticks([0.4,0.2])
+ax.set_yticklabels([])
+ax.set_ylabel('')
+ax.set_ylim(-0.3,0.1)
+
+ax = fig_R.add_subplot(1,4,4)
+ax.set_xscale('linear')
+
+for p,pdf in trejdf80.groupby(['t','tw1']):
+    t,tw1 = p
+    ax.scatter(pdf['Trel'],pdf['Δχ_μ'], s=3, color=get_color_tw1(tw1))
+
+ax.set_xlabel(r'$\Delta T/T_1$')
+ax.set_title('L=80', color='gray', fontsize=12)
+ax.set_xticks([0.4,0.2])
+ax.set_yticklabels([])
+ax.set_ylabel('')
+ax.set_ylim(-0.3,0.1)
+
+fig_R.savefig('temps_forbeamer.pdf')

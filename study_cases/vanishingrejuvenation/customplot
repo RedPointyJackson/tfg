@@ -95,3 +95,44 @@ ax.set_xlabel('$t_w$')
 ax.set_ylabel('χ')
 
 fig.savefig('trej.pdf')
+
+# For the beamer. Practically a copy-paste
+
+fig = plt.figure(figsize=(cm2inch(10),cm2inch(7)))
+ax = plt.gca()
+for t in ts:
+    if t in {1,1000}:
+        theA    = select(A,t)
+        theB    = select(B,t)
+        ax.plot(theA['mc']      , theA['β(1-C)'], lw=1, color=get_color(t))
+        ax.plot(STEPS+theB['mc'], theB['β(1-C)'], lw=1, color=get_color(t))
+
+ax.text(320,0.20,'$t_0=10$',color=get_color(1))
+ax.text(300,0.53,'$t_0=10^3$',color=get_color(1000))
+
+ax.text(700, 0.25, 'Δχ > 0', color=get_color(1))
+ax.text(1050, 0.40, 'Δχ < 0', color=get_color(1000))
+
+ax.set_xlabel('$t_w$')
+ax.set_ylabel('χ')
+
+fig.savefig('trej_A_beamer.pdf')
+
+
+fig = plt.figure(figsize=(cm2inch(10),cm2inch(7)))
+ax = plt.gca()
+
+ax.set_xlabel('$t_0$')
+ax.set_ylabel('Δχ')
+ax.set_xscale('log')
+ax.set_xlim(0.9,10**3)
+ax.axhline(0,lw=1,alpha=0.3,color='k')
+
+for t in ts:
+    theB = B[B['parameter'] == t]
+    greatest_χ = theB['β(1-C)'].max()
+    quench = A[(A['parameter'] == t)]
+    trej = greatest_χ - quench['β(1-C)'].min()
+    ax.scatter(t,trej,s=5,color=get_color(t))
+
+fig.savefig('trej_B_beamer.pdf')

@@ -15,3 +15,11 @@ data
 biblio
 study_cases/vanishingrejuvenation/annealA.csv
 study_cases/vanishingrejuvenation/annealB.csv
+beamer/*.log
+beamer/*.aux
+beamer/*.nav
+beamer/*.out
+beamer/*.snm
+beamer/*.toc
+beamer/*.synctex.gz
+

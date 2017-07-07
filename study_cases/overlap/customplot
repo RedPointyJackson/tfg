@@ -59,3 +59,9 @@ ax0.set_xlabel('MC')
 
 plt.tight_layout()
 plt.savefig('overlap.pdf')
+
+# For the beamer
+ax1.grid(b=False)
+ax0.grid(b=False)
+fig.set_size_inches(cm2inch(10), cm2inch(5))
+fig.savefig('overlap_beamer.pdf')

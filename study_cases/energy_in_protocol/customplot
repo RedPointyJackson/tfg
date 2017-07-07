@@ -59,3 +59,8 @@ ax.text(2.5, -1.7, 'T=0.9', fontsize=11, color='gray', horizontalalignment='cent
 
 
 fig.savefig('energyprotocol.pdf')
+
+# For the beamer
+ax.grid(b=False)
+fig.set_size_inches(cm2inch(10),cm2inch(5))
+fig.savefig('energyprotocol_beamer.pdf')
