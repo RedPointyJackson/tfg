@@ -133,6 +133,6 @@ for t in ts:
     greatest_χ = theB['β(1-C)'].max()
     quench = A[(A['parameter'] == t)]
     trej = greatest_χ - quench['β(1-C)'].min()
-    ax.scatter(t,trej,s=5,color=get_color(t))
+    ax.scatter(t,trej,s=5,color=niceblue)
 
 fig.savefig('trej_B_beamer.pdf')
