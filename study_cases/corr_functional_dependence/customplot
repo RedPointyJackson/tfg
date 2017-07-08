@@ -110,15 +110,78 @@ sm = cm.ScalarMappable(cmap=colormap,norm=plt.Normalize(vmin=0,vmax=maxt))
 sm.set_array([])
 
 
-cbaxes = fig.add_axes([0.25, 0.3, 0.25, 0.01])
+fig.savefig('corrfunction.pdf')
+
+
+
+# For the beamer
+fig = plt.figure(figsize=(cm2inch(10),cm2inch(5)))
+axL = fig.add_subplot(121)
+axR = fig.add_subplot(122)
+
+i = 0
+for t,tdf in df.groupby('parameter'):
+    if i%2 == 0:
+        axL.plot(tdf['mc'], tdf['value'],
+                lw=1, color=get_color_t(t))
+    i+=1
+
+axL.set_xscale('log')
+axL.set_xlabel('$t_w$')
+axL.set_ylabel('$C(t_w,t_w+t_0)$')
+
+for tw,twdf in df.groupby('mc'):
+    if i%2 == 0:
+        axR.plot(twdf['parameter'], twdf['value'],
+                lw=1, color=get_color_tw(tw))
+    i+=1
+
+axR.set_xscale('log')
+axR.set_xlabel('$t_0$')
+axR.set_ylabel('')
+
+axR.set_ylim(0,1)
+axL.set_ylim(0,1)
+
+axR.set_yticklabels([])
+
+
+
+# Create a fake colorbar
+def fmt(x, pos):
+    return '%d' % x
+
+
+sm = cm.ScalarMappable(cmap=colormap,norm=plt.Normalize(vmin=0,vmax=maxt))
+sm.set_array([])
+
+cbaxes = fig.add_axes([0.3, 0.4, 0.15, 0.01])
 cbar = plt.colorbar(sm,
                     format=mpl.ticker.FuncFormatter(fmt),
                     orientation='horizontal',
                     cax=cbaxes)
+cbar.set_ticks([0,500,1000])
 cbar.outline.set_visible(False)
-cbar.ax.set_title('')
+cbar.ax.set_title('t₀')
 cbar.ax.title.set_size(10)
 cbar.ax.title.set_color('#555555')
 
 
-fig.savefig('corrfunction.pdf')
+sm = cm.ScalarMappable(cmap=colormap,norm=plt.Normalize(vmin=0,vmax=maxt))
+sm.set_array([])
+
+cbaxes = fig.add_axes([0.63, 0.4, 0.15, 0.01])
+cbar = plt.colorbar(sm,
+                    format=mpl.ticker.FuncFormatter(fmt),
+                    orientation='horizontal',
+                    cax=cbaxes)
+cbar.set_ticks([0,500,1000])
+cbar.outline.set_visible(False)
+cbar.ax.set_title('$t_w$')
+cbar.ax.title.set_size(10)
+cbar.ax.title.set_color('#555555')
+
+axL.grid(b=False)
+axR.grid(b=False)
+
+fig.savefig('corrfunction_beamer.pdf')
