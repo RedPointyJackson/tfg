@@ -2,6 +2,7 @@
 \usetheme{default}
 \beamertemplatenavigationsymbolsempty
 
+\usepackage{booktabs}
 \usepackage{fontspec}
 \setmainfont{Linux Libertine}
 \setsansfont{Linux Biolinum}
@@ -279,6 +280,26 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Simulación}
+  \begin{itemize}
+  \item \textsc{Memento}
+  \item \textsc{Janus}
+  \end{itemize}
+  \begin{flushleft}
+    \begin{tabular}{ll}
+      \toprule
+     Parámetro & Valores programados \\
+      \midrule
+      $t_w^1$ & $10^4$ → $10^8$\\
+      $t_0$ & $10^4$ → $10^8$\\
+      $T_i$ & $0.9$ → $0.6$ \\
+      $L$ & $4$ → $80$ \\
+      \bottomrule
+    \end{tabular}
+  \end{flushleft}
+\end{frame}
+
+\begin{frame}
   \frametitle{Magnitudes}
   \pause
 % E,  M→q, C, χ, C₄
@@ -308,11 +329,27 @@
   \begin{center}
     \includegraphics{../study_cases/corr_functional_dependence/corrfunction_beamer.pdf}
   \end{center}
+  \begin{center}
+    \begin{tikzpicture}
+      \draw[|->, thick] (0,0) -- (10,0) node[at end, below] {\Large $t$};
+      \draw (3,0.25) -- (3,-0.25) node[below] {\Large $t_w$};
+      \draw (7,0.25) -- (7,-0.25) node[below] {\Large $t_w+t_0$};
+      \draw[<->] (3.2,0.3) to[out=30, in=150] (6.8,0.3);
+      \node[fill=white] at (5,0.75) {\Large $t₀$};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Magnitudes}
+% E,  M→q, C, χ, C₄
+  \begin{center}
+    \includegraphics{../study_cases/corr_functional_dependence/corrfunction_beamer.pdf}
+  \end{center}
   \begin{equation*}
     C(t_w, t_w + t₀) \ = \  \frac{1}{V} \sum_{i} \expval{s_i(t_w) ⋅ s_i(t_w+t₀)}
   \end{equation*}
 \end{frame}
-
 
 \begin{frame}
   \frametitle{Magnitudes}
@@ -404,6 +441,7 @@
 
 \begin{frame}
   \frametitle{Rejuvenecimiento}
+  ¿Por qué rejuvenecimiento débil?
   \begin{center}
     \includegraphics{../study_cases/vanishingrejuvenation/trej_A_beamer.pdf}
   \end{center}
